@@ -6,19 +6,19 @@ import userRoutes from "./Routes/UserRoutes.js";
 import documentRoutes from "./Routes/DocumentRoutes.js";
 
 const app = express();
-// Render uses its own PORT environment variable, often 10000
 const PORT = process.env.PORT || 5000;
 
 // Connect to MongoDB
 connectDB();
 
-// --- THIS IS THE FIX ---
-// We are explicitly telling the server to accept requests from any origin.
-// This is required for the live Vercel frontend to talk to the Render backend.
-app.use(cors({
-  origin: '*'
-}));
-// --------------------
+// --- THIS IS THE FINAL FIX ---
+// 1. This tells the server to allow requests from any website.
+app.use(cors({ origin: '*' }));
+
+// 2. This is the new line. It explicitly handles the browser's "preflight"
+//    permission check for all routes, which is required for deployment.
+app.options('*', cors());
+// -------------------------
 
 // Middleware to parse JSON requests
 app.use(express.json());
