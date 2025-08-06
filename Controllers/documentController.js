@@ -1,7 +1,7 @@
 import axios from 'axios';
 import FormData from 'form-data';
 
-// This will get the URL from the cloud environment
+// This will get the public URL of your Python service from the cloud environment
 const ML_API_URL = process.env.ML_SERVICE_URL;
 
 export const processDocument = async (req, res) => {
@@ -18,9 +18,10 @@ export const processDocument = async (req, res) => {
 
     const mlResponse = await axios.post(ML_API_URL, formData, {
       headers: { ...formData.getHeaders() },
-      timeout: 180000 // 3 minute timeout for cloud service
+      timeout: 180000 // 3 minute timeout for the cloud service
     });
     
+    console.log('[Node.js] Success! Received JSON response from Python.');
     res.status(200).json(mlResponse.data);
 
   } catch (error) {
